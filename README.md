@@ -1,4 +1,4 @@
-<h1 align='center'>machine-tiler</h1>
+<h1 align='center'>Machine-Tiler</h1>
 
 <p align='center'>Create Slippymaps given an SQS message pointing towards the OA data</p>
 
