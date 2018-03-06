@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "@mapbox/cloudfriend": "^1.9.0",
+    "@mapbox/watchbot": "^3.5.1"
+  },
+  "name": "machine-tiler",
+  "version": "1.0.0",
+  "description": "Tile OA Data for Rendering via mapbox-gl-js",
+  "main": "index.js",
+  "repository": "https://github.com/openaddresses/machine-tiler",
+  "author": "ingalls <ingalls@protonmail.com>",
+  "license": "MIT",
+  "private": false
+}
