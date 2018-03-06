@@ -7,6 +7,12 @@ const csv = require('fast-csv');
 const path = require('path');
 const request = require('request');
 const unzip = require('unzip');
+const tilelive = require('@mapbox/tilelive');
+const MBTiles = require('@mapbox/mbtiles');
+const s3 = require('@mapbox/tilelive-s3');
+
+s3.registerProtocols(tilelive);
+MBTiles.registerProtocols(tilelive);
 
 if (require.main === module) {
     let msg = '';
@@ -32,8 +38,24 @@ if (require.main === module) {
 
         if (entry.type !== 'File' || entry_path.ext !== '.csv') return entry.autodrain();
 
-        const t = tippecanoe(msg.type).on('end', () => {
-            console.error('end');
+        const t = tippecanoe(msg.type, (err) => {
+            if (err) throw err;
+
+            tilelive.load('mbtiles:///tmp/output.mbtiles', (err, src) => {
+                if (err) throw err;
+
+                tilelive.load(`s3://dotmaps.openaddresses.io/${msg.dest}/tiles/{z}/{x}/{y}`, (err, dst) => {
+                    if (err) throw err;
+
+                    tilelive.copy(src, dst, {
+                        listScheme: src.createZXYStream()
+                    }, (err) => {
+                        if (err) throw err;
+
+                        console.error('ok - Done!');
+                    });
+                });
+            });
         });
 
         const csvStream = csv({
@@ -103,7 +125,7 @@ function validate(msg) {
  * @param {function} cb (err, res) style callback
  * @returns {function} cb
  */
-function tippecanoe(type) {
+function tippecanoe(type, cb) {
     let output = '';
 
     const t = cp.spawn('tippecanoe', [
@@ -116,7 +138,9 @@ function tippecanoe(type) {
         detached: true,
         stdio: ['pipe', 'pipe', 'pipe' ]
     }).on('close', (code) => {
-        if (code > 0) throw new Error(`tippecanoe failed: ${output}`);
+        if (code > 0) return cb(new Error(`tippecanoe failed: ${output}`));
+
+        return cb();
     });
 
     t.stderr.on('data', (chunk) => {
