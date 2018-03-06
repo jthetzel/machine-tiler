@@ -35,10 +35,9 @@ jobs:
           key: v1-{{ .Branch }}-{{ epoch }}
           paths:
             - /caches/app.tar
-            - deploy:
-                name: Push application Docker image
-                command: |
-                  login="$(aws ecr get-login)"
-                  ${login}
-                  docker tag app "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
-                  docker push "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
+      - deploy:
+          name: Push application Docker image
+          command: |
+            $(aws ecr get-login)
+            docker tag app "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
+            docker push "${ECR_ENDPOINT}/app:${CIRCLE_SHA1}"
