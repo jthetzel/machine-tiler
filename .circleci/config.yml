@@ -20,5 +20,5 @@ jobs:
           name: Push application Docker image
           command: |
             $(aws ecr get-login)
-            docker tag app "${ECR_ENDPOINT}/machine-tiler:${CIRCLE_SHA1}"
-            docker push "${ECR_ENDPOINT}/machine-tiler:${CIRCLE_SHA1}"
+            docker tag app "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_SHA1}"
+            docker push "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/${CIRCLE_PROJECT_REPONAME}:${CIRCLE_SHA1}"
