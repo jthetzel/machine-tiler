@@ -14,6 +14,16 @@
 yarn install
 ```
 
+### Manual Queueing
+
+To manually queue a task, run
+
+```
+./queue.js
+```
+
+and follow the interactive prompts
+
 ## Deploying
 
 This repo can be deployed to OpenAddresses AWS infrastructure using [openaddresses/machine-ecs](https://github.com/openaddresses/machine-ecs)

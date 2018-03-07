@@ -1,6 +1,8 @@
 #!/usr/bin/env node
 
 const prompt = require('prompt');
+const path = require('path');
+const cf = require('@mapbox/cfn-config');
 const AWS = require('aws-sdk');
 
 try {
@@ -11,6 +13,7 @@ try {
 }
 
 const creds = require(path.resolve(process.env.HOME, '.oarc.json'));
+cf.preauth(creds);
 
 prompt.message = '$';
 prompt.start();
@@ -29,7 +32,7 @@ prompt.get([{
 },{ 
     name: 'dest',
     message: 'bucket postfix to upload tiles to',
-    default: 'runs/0'
+    default: 'runs/0',
     required: true,
     type: 'string'
 },{ 
@@ -39,7 +42,26 @@ prompt.get([{
     required: true,
     type: 'string'
 }], (err, argv) => {
-    const sqs = new AWS.SQS();
+    if (err) throw err;
 
+    cf.lookup.info(`machine-tiler-${argv.stack}`, creds.region, true, false, (err, info) => {
+        if (err) throw err;
 
+        if (!info || !info.Outputs || !info.Outputs.SnsTopic) throw new Error('Could not find SNS Topic');
+        const snsTopic = info.Outputs.SnsTopic;
+
+        const sns = new AWS.SNS();
+
+        sns.publish({
+            TopicArn: snsTopic,
+            Message: JSON.stringify({
+                type: argv.type,
+                data: argv.data,
+                dest: argv.dest
+            }),
+        }, (err, res) => {
+            if (err) throw err;
+            console.error('ok - queued');
+        });
+    });
 });
