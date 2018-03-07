@@ -11,6 +11,10 @@ const mbp = {
         Cluster: {
             Type: "String",
             Default: "production"
+        },
+        AlarmEmail: {
+            Type: "String",
+            Default: "ingalls@protonmail.com"
         }
     }
 };
@@ -18,7 +22,7 @@ const mbp = {
 // Generate Watchbot resources. You can use references to parameters and
 // resources that were defined above.
 const watch = watchbot.template({
-    cluster: { "Fn::Join" : [ "delimiter", [ 'arn:aws:ecs:us-east-1:', ref('AWS::AccountId'), ':cluster/machine-ecs-', ref('Cluster') ] ] },
+    cluster: { "Fn::Join" : [ '', [ 'arn:aws:ecs:us-east-1:', ref('AWS::AccountId'), ':cluster/machine-ecs-', ref('Cluster') ] ] },
     service: 'machine-tiler',
     serviceVersion: ref('GitSha'),
     env: { GitSha: ref('GitSha') },
