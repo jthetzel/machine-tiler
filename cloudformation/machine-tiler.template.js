@@ -22,7 +22,7 @@ const mbp = {
 // Generate Watchbot resources. You can use references to parameters and
 // resources that were defined above.
 const watch = watchbot.template({
-    cluster: ref('Cluster'),
+    cluster: join('', ['arn:aws:ecs:', ref('AWS::Region'), ':', ref('AWS:AccountId'), ':cluster/', ref('Cluster')]),
     service: 'machine-tiler',
     serviceVersion: ref('GitSha'),
     env: { GitSha: ref('GitSha') },
