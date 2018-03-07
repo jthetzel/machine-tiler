@@ -2,6 +2,7 @@ const watchbot = require('@mapbox/watchbot');
 const cf = require('@mapbox/cloudfriend');
 
 const mbp = {
+    Description: "Machine-Tiler Template - Create Vector Tiles w/ ECS-Watchbot",
     Parameters: {
         GitSha: {
             Description: "The Git SHA to deploy",
