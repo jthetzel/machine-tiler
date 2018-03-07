@@ -44,7 +44,7 @@ if (require.main === module) {
             tilelive.load('mbtiles:///tmp/output.mbtiles', (err, src) => {
                 if (err) throw err;
 
-                tilelive.load(`s3://dotmaps.openaddresses.io/${msg.dest}/tiles/{z}/{x}/{y}`, (err, dst) => {
+                tilelive.load(`s3://dotmaps.openaddresses.io/${msg.dest}/tiles/{z}/{x}/{y}.mvt`, (err, dst) => {
                     if (err) throw err;
 
                     tilelive.copy(src, dst, {
