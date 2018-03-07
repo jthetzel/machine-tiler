@@ -16,6 +16,8 @@ yarn install
 
 ## Deploying
 
-This repo is deployed on [openaddresses/machine-ecs](https://github.com/openaddresses/machine-ecs)
+This repo can be deployed to OpenAddresses AWS infrastructure using [openaddresses/machine-ecs](https://github.com/openaddresses/machine-ecs)
 
-Please see the instruciton there for installing the deploy tools and creating/updating a machine-tiler stack.
+CircleCI will create docker images on all branches and GitShas, uploading them to our ECR repository.
+
+For more information on deploying see the above machine-ecs repo.
