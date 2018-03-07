@@ -1,5 +1,5 @@
 const watchbot = require('@mapbox/watchbot');
-const ref = require('@mapbox/cloudfriend').ref;
+const cf = require('@mapbox/cloudfriend');
 
 const mbp = {
     Parameters: {
@@ -22,13 +22,13 @@ const mbp = {
 // Generate Watchbot resources. You can use references to parameters and
 // resources that were defined above.
 const watch = watchbot.template({
-    cluster: join('', ['arn:aws:ecs:', ref('AWS::Region'), ':', ref('AWS:AccountId'), ':cluster/', ref('Cluster')]),
+    cluster: cf.join('', ['arn:aws:ecs:', cf.ref('AWS::Region'), ':', cf.ref('AWS::AccountId'), ':cluster/', cf.ref('Cluster')]),
     service: 'machine-tiler',
-    serviceVersion: ref('GitSha'),
-    env: { GitSha: ref('GitSha') },
+    serviceVersion: cf.ref('GitSha'),
+    env: { GitSha: cf.ref('GitSha') },
     workers: 10,
     reservation: { softMemory: 1024, cpu: 1024 },
-    notificationEmail: ref('AlarmEmail'),
+    notificationEmail: cf.ref('AlarmEmail'),
     permissions: [{
             Effect: "Allow",
             Action: [ "cloudwatch:PutMetricData", "autoscaling:DescribeAutoScalingInstances" ],
