@@ -9,9 +9,9 @@ const request = require('request');
 const unzip = require('unzip');
 const tilelive = require('@mapbox/tilelive');
 const MBTiles = require('@mapbox/mbtiles');
-const s3 = require('@mapbox/tilelive-s3');
+const tilelive_s3 = require('@mapbox/tilelive-s3');
 
-s3.registerProtocols(tilelive);
+tilelive_s3.registerProtocols(tilelive);
 MBTiles.registerProtocols(tilelive);
 
 if (require.main === module) {
@@ -41,19 +41,13 @@ if (require.main === module) {
         const t = tippecanoe(msg.type, (err) => {
             if (err) throw err;
 
-            tilelive.load('mbtiles:///tmp/output.mbtiles', (err, src) => {
+            explode(msg.dest, (err) => {
                 if (err) throw err;
 
-                tilelive.load(`s3://dotmaps.openaddresses.io/${msg.dest}/tiles/{z}/{x}/{y}.mvt`, (err, dst) => {
+                meta(msg.dest, (err) => {
                     if (err) throw err;
 
-                    tilelive.copy(src, dst, {
-                        listScheme: src.createZXYStream()
-                    }, (err) => {
-                        if (err) throw err;
-
-                        console.error('ok - Done!');
-                    });
+                    console.error('ok - done!');
                 });
             });
         });
@@ -84,6 +78,56 @@ if (require.main === module) {
         });
 
         entry.pipe(csvStream);
+    });
+}
+
+/**
+ * Take the /tmp/output.mbtiles and explode the tiles accross s3
+ *
+ * @param {string} dest bucket postfix to use as a unique identifier
+ * @param {function} cb (err, res) style callback
+ * @returns {function}
+ */
+function explode(dest, cb) {
+    tilelive.load('mbtiles:///tmp/output.mbtiles', (err, src) => {
+        if (err) return cb(err);
+
+        tilelive.load(`s3://dotmaps.openaddresses.io/${dest}/tiles/{z}/{x}/{y}.mvt`, (err, dst) => {
+            if (err) cb(err);
+
+            tilelive.copy(src, dst, {
+                listScheme: src.createZXYStream()
+            }, (err) => {
+                return cb(err);
+            });
+        });
+    });
+}
+
+/**
+ * Take /tmp/output.mbtiles and upload metadata to s3
+ *
+ * @param {string} dest bucket postfix to use as a unique identifier
+ * @param {function} cb (err, res) style callback
+ * @returns {function}
+ */
+function meta(dest, cb) {
+    new MBTiles('/tmp/output.mbtiles', (err, mbtiles) => {
+        if (err) return cb(err);
+
+        mbtiles.getInfo((err, info) => {
+            if (err) return cb(err);
+
+            const s3 = new AWS.S3({ region: 'us-east-1' });
+
+            s3.upload({
+                Bucket: 'dotmaps.openaddresses.io',
+                Key: `${dest}/meta.json`,
+                Body: JSON.stringify(info)
+            }, (err) => {
+                 return cb(err);
+            });
+        });
     });
 }
 
