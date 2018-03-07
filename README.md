@@ -21,3 +21,10 @@ This repo can be deployed to OpenAddresses AWS infrastructure using [openaddress
 CircleCI will create docker images on all branches and GitShas, uploading them to our ECR repository.
 
 For more information on deploying see the above machine-ecs repo.
+
+## Updating ECS-Watchbot
+
+ecs-watchbot is locked to a specific version, if you bump the version, ensure a ecs-watchbot image is built
+for the version you are bumping to.
+
+See the ecs-watchbot ECR for currently built versions

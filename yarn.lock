@@ -64,7 +64,7 @@
     dyno "^1.2.0"
     meow "^3.7.0"
 
-"@mapbox/watchbot@^3.5.1":
+"@mapbox/watchbot@3.5.1":
   version "3.5.1"
   resolved "https://registry.yarnpkg.com/@mapbox/watchbot/-/watchbot-3.5.1.tgz#08fae0b154e9cb14df4cb8e49ced5324e5b10169"
   dependencies:
