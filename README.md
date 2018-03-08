@@ -8,6 +8,8 @@
 - Download CSV, Convert to GeoJSON & Vectorize w/ tippecanoe
 - Upload exploded mbtiles to dotmaps.openaddresses.io
 
+See an example of the web interface and a run of vectorized data here: http://dotmaps.openaddresses.io.s3-website-us-east-1.amazonaws.com/#runs/376265
+
 ## Install
 
 ```
