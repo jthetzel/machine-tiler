@@ -174,7 +174,7 @@ function tippecanoe(type, cb) {
 
     const t = cp.spawn('tippecanoe', [
         '-o', `/tmp/output.mbtiles`,
-        '--layer', 'data',
+        '--layer', 'output',
         '--minimum-zoom', '14',
         '--maximum-zoom', '14',
         '--no-feature-limit',
