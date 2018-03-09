@@ -30,7 +30,7 @@ and follow the interactive prompts
 
 This repo can be deployed to OpenAddresses AWS infrastructure using [openaddresses/machine-ecs](https://github.com/openaddresses/machine-ecs)
 
-CircleCI will create docker images on all branches and GitShas, uploading them to our ECR repository.
+[ECS-Conex](https://github.com/mapbox/ecs-conex) running on the OA AWS account watches this repo for commits and will create docker images for all branches and GitShas, uploading them to our ECR repository.
 
 For more information on deploying see the above machine-ecs repo.
 
