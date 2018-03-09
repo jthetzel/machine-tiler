@@ -50,7 +50,45 @@
                             'circle-color': '#FF6600'
                         }
                     });
+
+                    const popup = new mapboxgl.Popup({
+                        closeButton: false,
+                        closeOnClick: false
+                    });
+
+                    map.on('mouseenter', 'addresses', function(e) {
+                        // Change the cursor style as a UI indicator.
+                        map.getCanvas().style.cursor = 'pointer';
+
+                        const coordinates = e.features[0].geometry.coordinates.slice();
+                        const description = `
+                            <table style="width:100%">
+                            <tr><th>ID</th><th>${e.features[0].properties.ID}</th>
+                            <tr><th>Unit</th><th>${e.features[0].properties.UNIT}</th>
+                            <tr><th>Number</th><th>${e.features[0].properties.NUMBER}</th>
+                            <tr><th>Street</th><th>${e.features[0].properties.STREET}</th>
+                            <tr><th>City</th><th>${e.features[0].properties.CITY}</th>
+                            <tr><th>District</th><th>${e.features[0].properties.DISTRICT}</th>
+                            <tr><th>Region</th><th>${e.features[0].properties.REGION}</th>
+                            <tr><th>Postcode</th><th>${e.features[0].properties.POSTCODE}</th>
+                            <tr><th>Hash</th><th>${e.features[0].properties.HASH}</th>
+                            </table>
+                        `;
+
+                        // Ensure that if the map is zoomed out such that multiple
+                        // copies of the feature are visible, the popup appears
+                        // over the copy being pointed to.
+                        while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+
+                        popup.setLngLat(coordinates).setHTML(description).addTo(map);
+                    });
+
+                    map.on('mouseleave', 'places', function() {
+                        map.getCanvas().style.cursor = '';
+                        popup.remove();
+                    });
                 });
+
             }).catch((err) => {
                 console.error(err);
                 alert(`${hash}\nYou're here early! I either haven't finished building this tileset or I ran into a problem`);
