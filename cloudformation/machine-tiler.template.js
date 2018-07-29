@@ -50,4 +50,4 @@ const watch = watchbot.template({
 
 const outputs = { Outputs: { SnsTopic: { Value: watch.ref.topic } } };
 
-module.exports = watchbot.merge(mbp, watch, outputs);
+module.exports = cf.merge(mbp, watch, outputs);
