@@ -4,7 +4,10 @@ RUN apt-get update -y \
     && apt-get install -y software-properties-common python-software-properties || true \
     && add-apt-repository -y ppa:ubuntu-toolchain-r/test \
     && apt-get update -y \
-    && apt-get install -y curl libstdc++-5-dev
+    && apt-get install -y curl libstdc++-5-dev wget
+
+RUN wget https://s3.amazonaws.com/watchbot-binaries/linux/v4.10.0/watchbot -O /usr/local/bin/watchbot
+RUN chmod +x /usr/local/bin/watchbot
 
 RUN curl https://nodejs.org/dist/v6.11.1/node-v6.11.1-linux-x64.tar.gz | tar zxC /usr/local --strip-components=1
 

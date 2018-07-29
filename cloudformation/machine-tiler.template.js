@@ -28,7 +28,7 @@ const watch = watchbot.template({
     command: './worker.js',
     serviceVersion: cf.ref('GitSha'),
     env: { GitSha: cf.ref('GitSha') },
-    workers: 10,
+    maxSize: 10,
     reservation: { softMemory: 1024, cpu: 1024 },
     notificationEmail: cf.ref('AlarmEmail'),
     permissions: [{
