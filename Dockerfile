@@ -18,5 +18,3 @@ ADD . /usr/local/src/machine-tiler
 
 RUN cd /usr/local/src/machine-tiler && npm install
 
-CMD ["./worker.js"]
-

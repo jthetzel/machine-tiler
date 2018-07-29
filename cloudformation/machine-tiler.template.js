@@ -25,6 +25,7 @@ const mbp = {
 const watch = watchbot.template({
     cluster: cf.join('', ['arn:aws:ecs:', cf.ref('AWS::Region'), ':', cf.ref('AWS::AccountId'), ':cluster/', cf.ref('Cluster')]),
     service: 'machine-tiler',
+    command: './worker.js',
     serviceVersion: cf.ref('GitSha'),
     env: { GitSha: cf.ref('GitSha') },
     workers: 10,
