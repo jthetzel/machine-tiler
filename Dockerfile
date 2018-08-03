@@ -1,4 +1,4 @@
-FROM ubuntu:17.10
+FROM ubuntu:18.04
 
 RUN apt-get update -y \
     && apt-get install -y software-properties-common python-software-properties || true \
@@ -9,7 +9,7 @@ RUN apt-get update -y \
 RUN wget https://s3.amazonaws.com/watchbot-binaries/linux/v4.10.0/watchbot -O /usr/local/bin/watchbot
 RUN chmod +x /usr/local/bin/watchbot
 
-RUN curl https://nodejs.org/dist/v6.11.1/node-v6.11.1-linux-x64.tar.gz | tar zxC /usr/local --strip-components=1
+RUN curl https://nodejs.org/dist/v8.11.3/node-v8.11.3-linux-x64.tar.gz | tar zxC /usr/local --strip-components=1
 
 RUN mkdir ./mason \
     && curl -sSfL https://github.com/mapbox/mason/archive/v0.18.0.tar.gz | tar --gunzip --extract --strip-components=1 --exclude="*md" --exclude="test*" --directory=./mason \
