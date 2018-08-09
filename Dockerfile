@@ -1,7 +1,7 @@
 FROM ubuntu:18.04
 
 RUN apt-get update -y \
-    && apt-get install -y software-properties-common python-software-properties || true \
+    && apt-get install -y software-properties-common || true \
     && add-apt-repository -y ppa:ubuntu-toolchain-r/test \
     && apt-get update -y \
     && apt-get install -y curl libstdc++-5-dev wget
